@@ -13,6 +13,7 @@ Bất kỳ repo nào (Mắt, Tai, Não bạn bè...) muốn kết nối:
 1. Thêm `100048777766367/seed` vào danh bạ `synapses/peers.json` của họ.
 2. Hút đạo hàm từ `https://raw.githubusercontent.com/100048777766367/seed/main/synapse_backward.json` để tự tiến hóa!
 
+```
 100048777766367/nexus-02/
 ├── cells/
 │   ├── linguistic_cell.py         # Nâng chiều văn bản -> Vector 4D (SHAKE-256)
@@ -37,3 +38,4 @@ Bất kỳ repo nào (Mắt, Tai, Não bạn bè...) muốn kết nối:
 └── .github/
     └── workflows/
         └── node.yml               # Workflow bọc thép Git Token chống lỗi 128
+```
