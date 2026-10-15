@@ -1,11 +1,7 @@
 import json
 
 class UniversalAdapter:
-    """
-    KHỚP TƯƠNG THÍCH NGƯỢC VÔ HẠN:
-    Tự động chuẩn hóa mọi cấu trúc dữ liệu từ quá khứ (v1, v2) và tương lai
-    thành một định dạng tín hiệu đồng nhất cho nexus-01.
-    """
+    """Tự động chuẩn hóa mọi gói tin từ các đời seed, monad, genome và nexus"""
     @staticmethod
     def parse_packet(raw_text):
         try:
@@ -13,7 +9,6 @@ class UniversalAdapter:
         except Exception:
             return None
 
-        # Trích xuất quyết định/xung tín hiệu từ bất kỳ thế hệ nào
         decision = None
         if "decision" in data:
             decision = float(data["decision"])
@@ -26,10 +21,7 @@ class UniversalAdapter:
         else:
             decision = 0.5
 
-        # Trích xuất danh bạ lan truyền (Gossip)
         gossip = data.get("gossip_network", [])
-        
-        # Trích xuất đặc trưng đa chiều
         features = data.get("features", [decision, round(1.0 - decision, 4)])
         if len(features) < 2:
             features = [decision, round(1.0 - decision, 4)]
@@ -38,5 +30,5 @@ class UniversalAdapter:
             "decision": round(decision, 4),
             "features": features[:4],
             "gossip": gossip,
-            "contract": data.get("contract", "unknown.contract")
+            "contract": data.get("contract", "legacy.packet")
         }
