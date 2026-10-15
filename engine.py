@@ -1,18 +1,16 @@
 import os
 import sys
 import json
-import time
 import importlib
 import inspect
 from mechanisms.base import BaseMechanism
 
-class Nexus01Microkernel:
+class Nexus02Microkernel:
     def __init__(self):
-        self.repo_name = os.environ.get("GITHUB_REPOSITORY", "100048777766367/nexus-01")
+        self.repo_name = os.environ.get("GITHUB_REPOSITORY", "100048777766367/nexus-02")
         self.owner = os.environ.get("REPO_OWNER", "100048777766367")
-        self.ancestor = f"{self.owner}/nexus"
+        self.ancestor = f"{self.owner}/nexus-01"
         
-        # Ngữ cảnh dùng chung cho mọi cơ chế (Shared Context Bus)
         self.context = {
             "repo_name": self.repo_name,
             "owner": self.owner,
@@ -28,7 +26,7 @@ class Nexus01Microkernel:
                 with open(peers_file, "r") as f: return json.load(f).get("trusted_peers", [])
             except Exception: pass
         return [
-            f"{self.owner}/nexus", f"{self.owner}/genome",
+            f"{self.owner}/nexus-01", f"{self.owner}/nexus", f"{self.owner}/genome",
             f"{self.owner}/seed", f"{self.owner}/seed-01", f"{self.owner}/seed-02",
             f"{self.owner}/monad", f"{self.owner}/monad-01", f"{self.owner}/monad-02",
             f"{self.owner}/retina", f"{self.owner}/motor"
@@ -42,7 +40,6 @@ class Nexus01Microkernel:
             except Exception: pass
         return 1
 
-    # TỰ ĐỘNG QUÉT VÀ NẠP TẤT CẢ CƠ CHẾ TRONG THƯ MỤC mechanisms/
     def discover_and_load_mechanisms(self):
         mechanisms = []
         mech_dir = os.path.join(os.path.dirname(__file__), "mechanisms")
@@ -55,33 +52,30 @@ class Nexus01Microkernel:
                     for _, obj in inspect.getmembers(mod, inspect.isclass):
                         if issubclass(obj, BaseMechanism) and obj is not BaseMechanism:
                             mechanisms.append(obj())
-                            print(f"🔌 [MICROKERNEL NẠP TỆP] Cơ chế: '{obj.name}' từ '{file}'")
+                            print(f"🔌 [NẠP CƠ CHẾ]: '{obj.name}' từ '{file}'")
                 except Exception as e:
-                    print(f"⚠️ [LỖI NẠP TỆP {file}]: {e}")
+                    print(f"⚠️ [LỖI NẠP {file}]: {e}")
 
-        # Sắp xếp theo mức độ ưu tiên thực thi
         mechanisms.sort(key=lambda m: getattr(m, 'priority', 100))
         return mechanisms
 
     def run(self):
         print("=" * 65)
-        print(f"💎 [NEXUS-01 MICROKERNEL] KHỞI ĐỘNG THẾ HỆ #{self.context['current_epoch']}")
-        print(f"🏛️ Kiến trúc: Khớp siêu lỏng phân rã (Decoupled Microkernel)")
+        print(f"🛡️ [NEXUS-02 IMMUNE MICROKERNEL] KHỞI ĐỘNG THẾ HỆ #{self.context['current_epoch']}")
+        print(f"👑 Bậc: F2 Tự Trị Bất Hoại (Immune & Reflective)")
         print("=" * 65)
 
         mechanisms = self.discover_and_load_mechanisms()
-        
-        # Thực thi tuần tự các cơ chế (cô lập lỗi độc lập)
         for mech in mechanisms:
             try:
                 mech.execute(self.context)
             except Exception as e:
-                print(f"🚨 [CẢNH BÁO CƠ CHẾ '{mech.name}']: {e} (Hệ thống tự thích ứng, bỏ qua lỗi)")
+                print(f"🚨 [CẢNH BÁO LỖI '{mech.name}']: {e} (Tự thích ứng tiếp tục chạy)")
 
         print("=" * 65)
-        print(f"✨ [NEXUS-01 HOÀN TẤT VÒNG ĐỜI] Thế hệ #{self.context['current_epoch']} đã hội tụ thành công!")
+        print(f"✨ [HOÀN TẤT VÒNG ĐỜI NEXUS-02] Nhịp đập thế hệ #{self.context['current_epoch']} đã hội tụ!")
         print("=" * 65)
 
 if __name__ == "__main__":
-    node = Nexus01Microkernel()
+    node = Nexus02Microkernel()
     node.run()
