@@ -12,7 +12,6 @@ class GrazeMechanism(BaseMechanism):
         owner = context.get("owner", "100048777766367")
         wisdom_text = None
 
-        # 1. Cào cội nguồn triết học qua con trỏ HEAD
         targets = [
             f"https://github.com/{owner}/Wpesetd-AI/raw/HEAD/legacy/01_the_great_wisdom_map.md",
             f"https://github.com/{owner}/Wpesetd-AI/raw/HEAD/ontology/philosophy_ontology_v2.0.json"
@@ -24,19 +23,18 @@ class GrazeMechanism(BaseMechanism):
                 wisdom_text = res.stdout.decode('utf-8', errors='ignore')[:150]
                 break
 
-        # 2. Vươn ra bách khoa toàn thư thế giới mở Wikipedia
         if not wisdom_text:
             try:
                 req = urllib.request.Request("https://en.wikipedia.org/api/rest_v1/page/random/summary", 
-                                             headers={"User-Agent": "Nexus01-Decomposed-Node"})
-                with urllib.request.urlopen(req, timeout=6) as resp:
+                                             headers={"User-Agent": "Nexus02-Immune-Node"})
+                with urllib.request.urlopen(req, timeout=5) as resp:
                     d = json.loads(resp.read().decode())
                     wisdom_text = f"{d.get('title')}: {d.get('extract')[:120]}"
-                    print(f"🌐 [GRAZE] Cào ngẫu nhiên Wikipedia: {d.get('title')}")
+                    print(f"🌐 [GRAZE] Cào Wikipedia: {d.get('title')}")
             except Exception: pass
 
         if not wisdom_text:
-            wisdom_text = "Nexus-01: Tiến hóa phân rã vi nhân bất đồng bộ"
+            wisdom_text = "Nexus-02: Thực thể tự trị có hệ miễn dịch và giấc mơ số"
 
         context["wisdom_text"] = wisdom_text
         context["wisdom_vector"] = LinguisticCell.embed_text(wisdom_text)
